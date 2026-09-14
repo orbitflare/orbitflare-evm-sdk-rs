@@ -1,0 +1,96 @@
+[package]
+name = "orbitflare-evm-sdk"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+description = "Rust SDK for OrbitFlare EVM chains - Polygon, BNB, and Robinhood Chain. RPC, WebSocket, and Polygon gRPC."
+authors = ["OrbitFlare"]
+license = "MIT"
+repository = "https://github.com/orbitflare/orbitflare-evm-sdk-rs"
+homepage = "https://orbitflare.com"
+readme = "README.md"
+keywords = ["polygon", "bnb", "evm", "orbitflare", "grpc"]
+categories = ["api-bindings", "development-tools"]
+
+[features]
+default = ["rpc"]
+rpc = [
+    "dep:reqwest",
+    "dep:serde_json",
+    "dep:tokio",
+    "dep:alloy-primitives",
+    "dep:alloy-rpc-types-eth",
+    "dep:alloy-network",
+    "dep:alloy-serde",
+]
+ws = [
+    "rpc",
+    "dep:tokio-tungstenite",
+    "dep:futures-util",
+]
+grpc = [
+    "dep:orbitflare-polygon-proto",
+    "dep:tonic",
+    "dep:tonic-prost",
+    "dep:prost",
+    "dep:tokio",
+    "dep:alloy-primitives",
+]
+all = ["rpc", "ws", "grpc"]
+
+[dependencies]
+thiserror = "2.0.20"
+tracing = "0.1.44"
+serde = { version = "1.0.229", features = ["derive"] }
+
+reqwest = { version = "0.13.5", features = ["json"], optional = true }
+serde_json = { version = "1.0.151", optional = true }
+tokio = { version = "1.53.1", features = ["rt", "time", "sync", "macros", "net"], optional = true }
+alloy-primitives = { version = "1.7.3", features = ["serde"], optional = true }
+alloy-rpc-types-eth = { version = "1.8.3", optional = true }
+alloy-network = { version = "1.8.3", optional = true }
+alloy-serde = { version = "1.8.3", optional = true }
+
+tokio-tungstenite = { version = "0.30.0", features = ["native-tls"], optional = true }
+futures-util = { version = "0.3.34", default-features = false, features = ["sink"], optional = true }
+
+orbitflare-polygon-proto = { version = "0.1.0", optional = true }
+tonic = { version = "0.14.6", optional = true, features = ["tls-ring", "tls-native-roots"] }
+tonic-prost = { version = "0.14.6", optional = true }
+prost = { version = "0.14.4", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.53.1", features = ["full"] }
+tracing-subscriber = "0.3.23"
+
+[[example]]
+name = "rpc_basic"
+required-features = ["rpc"]
+
+[[example]]
+name = "rpc_full"
+required-features = ["rpc"]
+
+[[example]]
+name = "ws_basic"
+required-features = ["ws"]
+
+[[example]]
+name = "grpc_basic"
+required-features = ["grpc"]
+
+[[example]]
+name = "grpc_full"
+required-features = ["grpc"]
+
+[[example]]
+name = "multichain"
+required-features = ["rpc"]
+
+[[example]]
+name = "custom_chain"
+required-features = ["rpc"]
+
+[[example]]
+name = "nitro_fields"
+required-features = ["rpc"]
